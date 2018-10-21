@@ -1,0 +1,303 @@
+<!DOCTYPE HTML>
+<!--
+	Verti by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>FoodWill</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<link rel="stylesheet" href="https://js.api.here.com/v3/3.0/mapsjs-ui.css?dp-version=1533195059" />
+		<!-- <script type="text/javascript" src="https://js.api.here.com/v3/3.0/mapsjs-ui.css?dp-version=1533195059"></script> -->
+		<script type="text/javascript" src="https://js.api.here.com/v3/3.0/mapsjs-core.js"></script>
+		<script type="text/javascript" src="https://js.api.here.com/v3/3.0/mapsjs-service.js"></script>
+		<script type="text/javascript" src="https://js.api.here.com/v3/3.0/mapsjs-ui.js"></script>
+		<script type="text/javascript" src="https://js.api.here.com/v3/3.0/mapsjs-mapevents.js"></script>
+
+		<!-- <head>
+<meta name="viewport" content="initial-scale=1.0, width=device-width" />
+<link rel="stylesheet" type="text/css" href="https://js.api.here.com/v3/3.0/mapsjs-ui.css?dp-version=1533195059" />
+<script type="text/javascript" src="https://js.api.here.com/v3/3.0/mapsjs-core.js"></script>
+<script type="text/javascript" src="https://js.api.here.com/v3/3.0/mapsjs-service.js"></script>
+<script type="text/javascript" src="https://js.api.here.com/v3/3.0/mapsjs-ui.js"></script>
+<script type="text/javascript" src="https://js.api.here.com/v3/3.0/mapsjs-mapevents.js"></script>
+</head> -->
+
+
+	</head>
+	<body class="is-preload left-sidebar">
+		<div id="page-wrapper">
+
+			<!-- Header -->
+				<div id="header-wrapper">
+					<header id="header" class="container">
+
+						<!-- Logo -->
+							<div id="logo">
+								<h1><a href="index.html">FoodWill</a></h1>
+							</div>
+
+						<!-- Nav -->
+							<nav id="nav">
+								<ul>
+									<li><a href="index.html">Welcome</a></li>
+
+									<li class="current"><a href="left-sidebar.html">Map</a></li>
+
+									<li><a href="no-sidebar.html">Sign Up/Login</a></li>
+								</ul>
+							</nav>
+
+					</header>
+				</div>
+
+			<!-- Main -->
+				<div id="main-wrapper">
+					<div class="container">
+						<div class="row gtr-200">
+							<div class="col-4 col-12-medium">
+								<div id="sidebar">
+
+									<!-- Sidebar -->
+										<section>
+											<h3>Instructions</h3>
+											<p>Those blue markers show nearby food and their address, click on them to see the description and picture of the food.</p>
+
+											<p>Pick where you live and input the zip code.</p>
+
+											<h3>List what kind of food you would like to donate.</h3>
+										</section>
+
+								</div>
+							</div>
+							<div class="col-8 col-12-medium imp-medium">
+								<div id="content">
+
+									<!-- Content -->
+										<article>
+
+												<p id="demo"></p>
+												  <div id="map" style="width: 100%; height: 400px; background: grey" />
+												  <script  type="text/javascript" charset="UTF-8" >
+													// var data;
+   //   $.ajax("userData.json").done(function(msg) {
+   //     data = JSON.parse(msg);
+   //     console.log(data);
+   //   });
+   // var latitude,longitude;
+   // var database = firebase.database();
+   // var starCountRef = firebase.database().ref('users' + postId + '/starCount');
+ // starCountRef.on('value', function(snapshot) {
+ //   var data = snapshot.val()
+ //   latitude = users.latitude;
+ //   longitude = users.longitude;
+ //   updateStarCount(postElement, snapshot.val());
+ // });
+
+   getLocation()
+   var x = document.getElementById("demo");
+   var latitude;
+   var longitude;
+   function getLocation() {
+       if (navigator.geolocation) {
+           navigator.geolocation.getCurrentPosition(showPosition);
+       } else {
+           x.innerHTML = "Geolocation is not supported by this browser.";
+       }
+   }
+   function showPosition(position) {
+       x.innerHTML = "Latitude: " + position.coords.latitude +
+       "<br>Longitude: " + position.coords.longitude;
+       latitude = position.coords.latitude;
+       longitude = position.coords.longitude;
+       addInfoBubble(map);
+       addSVGMarkers(map);
+   }
+
+ /**
+  * Creates a new marker and adds it to a group
+  * @param {H.map.Group} group       The group holding the new marker
+  * @param {H.geo.Point} coordinate  The location of the marker
+  * @param {String} html             Data associated with the marker
+  */
+ function addMarkerToGroup(group, coordinate, html) {
+   var marker = new H.map.Marker(coordinate);
+   // add custom data to the marker
+   marker.setData(html);
+   group.addObject(marker);
+ }
+ //add  location svg markers
+
+ function addSVGMarkers(map){
+   //Create the svg mark-up
+   var svgMarkup = '<svg  width="24" height="24" xmlns="http://www.w3.org/2000/svg">' +
+   '<rect stroke="black" fill="${FILL}" x="1" y="1" width="22" height="22" />' +
+   '<text x="12" y="18" font-size="12pt" font-family="Arial" font-weight="bold" ' +
+   'text-anchor="middle" fill="${STROKE}" >i</text></svg>';
+
+   // Add the first marker
+   var bearsIcon = new H.map.Icon(
+     svgMarkup.replace('${FILL}', 'blue').replace('${STROKE}', 'red')),
+     bearsMarker = new H.map.Marker({lat: latitude, lng: longitude },
+       {icon: bearsIcon});
+
+   map.addObject(bearsMarker);
+   moveMapToLocation(map);
+ }
+ function moveMapToLocation(map){
+   map.setCenter({lat:latitude, lng:longitude});
+   map.setZoom(14);
+ }
+ /**
+  * Add two markers showing the position of Liverpool and Manchester City football clubs.
+  * Clicking on a marker opens an infobubble which holds HTML content related to the marker.
+  * @param  {H.Map} map      A HERE Map instance within the application
+  */
+ function addInfoBubble(map) {
+   var group = new H.map.Group();
+
+   map.addObject(group);
+
+   // add 'tap' event listener, that opens info bubble, to the group
+   group.addEventListener('tap', function (evt) {
+     // event target is the marker itself, group is a parent event target
+     // for all objects that it contains
+     var bubble =  new H.ui.InfoBubble(evt.target.getPosition(), {
+       // read custom data
+       content: evt.target.getData()
+     });
+     // show info bubble
+     ui.addBubble(bubble);
+   }, false);
+
+
+   addMarkerToGroup(group, {lat:53.430, lng:-2.961},
+     '<div ><a href=\'http://www.liverpoolfc.tv\' >Liverpool</a>' +
+     '</div><div >Anfield<br>Capacity: 45,362</div>');
+
+ }
+
+
+
+ /**
+  * Boilerplate map initialization code starts below:
+  */
+
+ // initialize communication with the platform
+ var platform = new H.service.Platform({
+   app_id: 'devportal-demo-20180625',
+   app_code: '9v2BkviRwi9Ot26kp2IysQ',
+   useHTTPS: true
+ });
+ var pixelRatio = window.devicePixelRatio || 1;
+ var defaultLayers = platform.createDefaultLayers({
+   tileSize: pixelRatio === 1 ? 256 : 512,
+   ppi: pixelRatio === 1 ? undefined : 320
+ });
+
+ // initialize a map - this map is centered over Europe
+ var map = new H.Map(document.getElementById('map'),
+   defaultLayers.normal.map,{
+   center: {lat: 37, lng: -120},
+   //center: {lat: latitude, lng: longitude},
+   zoom: 7,
+   pixelRatio: pixelRatio
+ });
+
+ // MapEvents enables the event system
+ // Behavior implements default interactions for pan/zoom (also on mobile touch environments)
+ var behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
+
+ // create default UI with layers provided by the platform
+ var ui = H.ui.UI.createDefault(map, defaultLayers);
+
+ // Now use the map as required...
+										  </script>
+
+
+										</article>
+
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			<!-- Footer -->
+			<div id="footer-wrapper">
+				<footer id="footer" class="container">
+					<div class="row">
+						<div class="col-3 col-6-medium col-12-small">
+
+							<!-- Links -->
+								<section class="widget links">
+									<h3> Charities </h3>
+									<ul class="style2">
+										<li><a href="https://www.redcross.org">American Redcross</a></li>
+										<li><a href="https://www.salvationarmyusa.org/usn/">The Salvation Army</a></li>
+										<li><a href="https://www.feedingamerica.org/">Feeding America</a></li>
+										<li><a href="https://www.stjude.org/">St.Jude</a></li>
+										<li><a href="https://www.habitat.org/">Habitat For Humanity</a></li>
+									</ul>
+								</section>
+
+						</div>
+						<div class="col-3 col-6-medium col-12-small">
+
+							<!-- Links -->
+								<section class="widget links">
+									<h3 style="color: #f4f4f4;">  asdf </h3>
+									<ul class="style2">
+										<li><a href="http://www.ymca.net/">YMCA</a></li>
+										<li><a href="https://www.woundedwarriorproject.org/">Wounded Warrior Project</a></li>
+										<li><a href="https://www.voa.org/">Volunteers Of America</a></li>
+										<li><a href="https://www.wvi.org/">World Vision</a></li>
+										<li><a href="https://www.unitedway.org/">United Way Worldwide</a></li>
+									</ul>
+								</section>
+
+						</div>
+						<div class="col-3 col-6-medium col-12-small">
+
+							<!-- Links -->
+								<section class="widget links">
+									<h3 style="color: #f4f4f4;">  asdf </h3>
+									<ul class="style2">
+										<li><a href="https://www.taskforce.org/">Task Force for Global Health</a></li>
+										<li><a href="http://www.foodforthepoor.org/">Food for the Poor</a></li>
+										<li><a href="https://www.bgca.org/">Boys & Girls Club of America</a></li>
+										<li><a href="https://www.catholiccharitiesusa.org/">Catholic Charities USA</a></li>
+										<li><a href="http://www.goodwill.org/">Goodwill</a></li>
+									</ul>
+								</section>
+
+						</div>
+						<div class="row">
+							<div class="col-12">
+								<div id="copyright">
+									<ul class="menu">
+										<li>&copy; FoodWill. All rights reserved</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</footer>
+				</div>
+
+			</div>
+
+		<!-- Scripts -->
+
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.dropotron.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+
+	</body>
+</html>
